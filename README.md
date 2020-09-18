@@ -27,4 +27,6 @@ les erreurs de code éventuelles seront précisées par le compilateur.
 ## Historique des programmes codés
 -   HelloWorld
 
+## Projets convoîtés
 
+Nous sommes partis pour concevoir un jeu de Pong en C.
