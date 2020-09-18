@@ -20,7 +20,7 @@ Les parties de code qui seront faites en local seront fusionnées avec les parti
 ## Rappel pour compiler un programme en C
 
 -   gcc <nom_du_programme>.c
--   ./<nom_du_programme>.out
+-   ./a.out
 
 les erreurs de code éventuelles seront précisées par le compilateur.
 
