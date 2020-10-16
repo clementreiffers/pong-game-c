@@ -9,7 +9,8 @@ struct Complexe
 typedef struct Complexe complexe;
 typedef int entier;
 
-void afficherComplexe();
+void afficherComplexe(complexe z);
+void initialiserComplexe(complexe* pz, double re, double im);
 
 int main(int argc, char const *argv[]) {
     struct Complexe z;
@@ -33,11 +34,32 @@ int main(int argc, char const *argv[]) {
 
     entier n = 10;
 
+    complexe z4;
+    initialiserComplexe(&z4, 10, 10); // fonctionne mais initialise pas z4
+    afficherComplexe(z4);
 
+    complexe* pz3 = &z3;
+    // modification des champs des structures depuis l'adresse de ces dernieres
+    (*pz3).re = 10;
+    (*pz3).im = 10;
+    pz3->re = 43; // remplace (*pz3.re)
+    pz3->im = 43;
+    afficherComplexe(z3);
+
+    afficherComplexe(z4);
     return 0;
 }
 
 void afficherComplexe(complexe z) {
     // le parametre est passé par valeur
     printf("%.2f + i%.2f \n", z.re, z.im);
+}
+
+void initialiserComplexe(complexe* pz, double re, double im) {
+    /*
+    z.re = re;
+    z.im = im;
+    */
+    pz->re = re;
+    pz->im = im;
 }
