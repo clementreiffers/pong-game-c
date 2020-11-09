@@ -22,14 +22,14 @@ int main(int argc, char *argv[])
 	SDL_Rect rectangle1; // creation des coordonnées du rectangle
 	rectangle1.x = 50;
 	rectangle1.y = 300;
-	rectangle1.w = 50;
-	rectangle1.h = 200;
+	rectangle1.w = 20;
+	rectangle1.h = 50;
 
 	SDL_Rect rectangle2; // creation des coordonnées du rectangle
-	rectangle2.x = 1400;
+	rectangle2.x = 1430;
 	rectangle2.y = 300;
-	rectangle2.w = 50;
-	rectangle2.h = 200;
+	rectangle2.w = 20;
+	rectangle2.h = 50;
 
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -63,7 +63,44 @@ int main(int argc, char *argv[])
 
 
 	SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer
-	SDL_Delay(9000);
+
+	SDL_bool program_launched = SDL_TRUE;
+
+	while(program_launched)
+	{
+		SDL_Event evenement; //tous nos evenements seront gérés à partir de cette ligne
+
+		while(SDL_PollEvent(&evenement))//fonction qui va capturer, enregistrer tous les evenements
+		{
+			switch(evenement.type)
+			{
+				case SDL_KEYDOWN:
+					switch(evenement.key.keysym.sym)
+					{
+						case SDLK_z:
+							printf("le rectangle de gauche va en haut\n");
+							continue;
+						case SDLK_s:
+							printf("le rectangle de gauche va en bas\n");
+							continue;
+						case SDLK_o:
+							printf("le rectangle de droite va en haut\n");
+						case SDLK_l:
+							printf("le rectangle de droite va en bas\n");
+						default:
+							continue;
+
+					}
+
+				case SDL_QUIT:
+					program_launched = SDL_FALSE;
+					break;
+
+				default:
+					break;
+			}
+		}
+	}
 
 	/*------------------------------------------------------------------------------------------------------------------*/
 
