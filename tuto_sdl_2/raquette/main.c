@@ -18,18 +18,21 @@ int main(int argc, char *argv[])
 {
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
+	
 
 	SDL_Rect rectangle1; // creation des coordonnées du rectangle
 	rectangle1.x = 50;
 	rectangle1.y = 300;
 	rectangle1.w = 20;
-	rectangle1.h = 50;
+	rectangle1.h = 70;
 
 	SDL_Rect rectangle2; // creation des coordonnées du rectangle
 	rectangle2.x = 1430;
 	rectangle2.y = 300;
 	rectangle2.w = 20;
-	rectangle2.h = 50;
+	rectangle2.h = 70;
+
+	int continuer = 1;
 
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -38,71 +41,60 @@ int main(int argc, char *argv[])
 	//création fenêtre + rendu
 
 	if (SDL_CreateWindowAndRenderer(1500,900, 0, &window, &renderer) != 0) 
-		//l'esperluette à un pointeur de pointeur donc il faut passer par l'adresse
 		SDL_ExitWithError("Impossible de creer rendu et fenêtre");
 
-	/*------------------------------------------------------------------------------------------------------------------*/
 
-	if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE) !=0)
-		SDL_ExitWithError("Il n'est pas possible de changer la couleur");
-/*
-	if (SDL_RenderDrawPoint(renderer, 100, 450) !=0 )
-		SDL_ExitWithError("Il est Impossible de dessiner un point");
-
-	if (SDL_RenderDrawLine(renderer, 55, 55, 200, 400) !=0 )
-			// les deux premiers paramètres prennent le x et y du pt A
-			//les deux derniers paramètres prennent le x et y du pt B
-		SDL_ExitWithError("Il est Impossible de dessiner un point");
-*/
-
-	if (SDL_RenderFillRect(renderer, &rectangle1) !=0)
-		SDL_ExitWithError("Impossible de dessiner un rectangle");
-
-	if (SDL_RenderFillRect(renderer, &rectangle2) !=0)
-		SDL_ExitWithError("Impossible de dessiner un rectangle");
-
-
-	SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer
-
-	SDL_bool program_launched = SDL_TRUE;
-
-	while(program_launched)
+	while(continuer)
 	{
 		SDL_Event evenement; //tous nos evenements seront gérés à partir de cette ligne
 
 		while(SDL_PollEvent(&evenement))//fonction qui va capturer, enregistrer tous les evenements
 		{
 			switch(evenement.type)
-			{
+			{	
+				case SDL_QUIT:
+					continuer = 0;
 				case SDL_KEYDOWN:
 					switch(evenement.key.keysym.sym)
 					{
+						case SDLK_ESCAPE: //fermeture de la fenetre via la touche echap
+						case SDLK_q:
+							continuer = 0;
+						break;
+
 						case SDLK_z:
-							printf("le rectangle de gauche va en haut\n");
-							continue;
+							rectangle1.y -= 20;
+						break;
+
 						case SDLK_s:
-							printf("le rectangle de gauche va en bas\n");
-							continue;
-						case SDLK_o:
-							printf("le rectangle de droite va en haut\n");
-						case SDLK_l:
-							printf("le rectangle de droite va en bas\n");
-						default:
-							continue;
+							rectangle1.y += 20;
+						break;
 
+						case SDLK_UP:
+							rectangle2.y -=20;
+						break;
+
+						case SDLK_DOWN:
+							rectangle2.y +=20;
 					}
-
-				case SDL_QUIT:
-					program_launched = SDL_FALSE;
-					break;
-
-				default:
-					break;
 			}
 		}
-	}
+		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+		SDL_RenderClear(renderer);
+		SDL_SetRenderDrawColor(renderer,0,0,0,0);
 
-	/*------------------------------------------------------------------------------------------------------------------*/
+		if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE) !=0)
+			SDL_ExitWithError("Il n'est pas possible de changer la couleur");
+
+		if (SDL_RenderFillRect(renderer,&rectangle1) !=0 )
+			SDL_ExitWithError("Impossible de creer le rectangle de gauche");
+
+		if (SDL_RenderFillRect(renderer,&rectangle2) !=0 )
+			SDL_ExitWithError("Impossible de creer le rectangle de droite");
+
+
+		SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer	
+	}
 
 
 	SDL_DestroyRenderer(renderer);
