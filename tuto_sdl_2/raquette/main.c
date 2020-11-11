@@ -18,6 +18,7 @@ int main(int argc, char *argv[])
 {
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
+	int continuer = 1;
 	
 
 	SDL_Rect rectangle1; // creation des coordonnées du rectangle
@@ -32,7 +33,6 @@ int main(int argc, char *argv[])
 	rectangle2.w = 20;
 	rectangle2.h = 70;
 
-	int continuer = 1;
 
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -77,6 +77,25 @@ int main(int argc, char *argv[])
 						case SDLK_DOWN:
 							rectangle2.y +=20;
 					}
+				case SDL_KEYUP:
+					switch(evenement.key.keysym.sym)
+					{
+						case SDLK_z:
+							rectangle1.y -= 20;
+						break;
+
+						case SDLK_s:
+							rectangle1.y += 20;
+						break;
+
+						case SDLK_UP:
+							rectangle2.y -=20;
+						break;
+
+						case SDLK_DOWN:
+							rectangle2.y +=20;
+					}
+
 			}
 		}
 		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
