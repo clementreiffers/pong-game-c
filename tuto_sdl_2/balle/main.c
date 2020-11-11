@@ -4,18 +4,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-/*
-	les differents types rendus:
-
-		SDL_RENDERER_SOFTWARE	   (acceleration depuis le processeur)
-		SDL_RENDERER_ACCELERATED   (acceleration matèriel utlisation de la carte graphique)
-		SDL_RENDERER_PRESENTVSYNC  (rendu pour la synchronisation verticale)
-		SDL_RENDERER_TARGETTEXTURE (rendus pour les textures)
-*/
-
-void SDL_ExitWithError(const char *message); //fonction creee pour afficher un message lorsque la fenêtre ne peut s'afficher
-
-//draw one quadrant arc, and mirror the other 4 quadrants
 void ellipse(SDL_Renderer* r, int x0, int y0, int radiusX, int radiusY)
 {
     float pi  = 3.14159265358979323846264338327950288419716939937510;
@@ -64,6 +52,10 @@ void ellipse(SDL_Renderer* r, int x0, int y0, int radiusX, int radiusY)
     }
 }
 
+void SDL_ExitWithError(const char *message); //fonction creee pour afficher un message lorsque la fenêtre ne peut s'afficher
+
+//draw one quadrant arc, and mirror the other 4 quadrants
+
 
 int main(int argc, char *argv[])
 {
@@ -82,10 +74,12 @@ int main(int argc, char *argv[])
 	if (SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer) != 0) 
 		SDL_ExitWithError("Impossible de creer rendu et fenêtre");
 
-  int x = 100;
-  int y = 100;
-  int dx = rand()%5;
-  int dy = rand()%5;
+  float x = 100;
+  float y = 100;
+  float dx = rand() % 4;
+  int sx = 1;
+  float dy = rand() % 4;
+  int sy = 1;
   int r = 10;
 	while(continuer)
 	{
@@ -117,11 +111,9 @@ int main(int argc, char *argv[])
     x+=dx;
     y+=dy;
 
-    if(x<=0+r || x>=width-r)
-      dx=-dx;
+    x<=0+r || x>=width-r ? sx=-sx, dx = sx * rand()%4 : 1;
+    y<=0+r || y>=height-r ? sy=-sy, dy = sy * rand()%4 : 1;
 
-    if(y<=0+r || y>=height-r)
-      dy=-dy;
 		SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer	
 	}
 
