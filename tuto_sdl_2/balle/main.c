@@ -62,16 +62,17 @@ int main(int argc, char *argv[])
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 	int continuer = 1;
+ 
+
   int width = 500;
   int height = 500;
 
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		SDL_ExitWithError("initialisation SDL");
-
 	//création fenêtre + rendu
 
-	if (SDL_CreateWindowAndRenderer(width, height, 0, &window, &renderer) != 0) 
+	if (SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_MAXIMIZED, &window, &renderer) != 0) 
 		SDL_ExitWithError("Impossible de creer rendu et fenêtre");
 
   float x = 100;
