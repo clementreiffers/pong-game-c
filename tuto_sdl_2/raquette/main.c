@@ -14,46 +14,54 @@
 
 void SDL_ExitWithError(const char *message); //fonction creee pour afficher un message lorsque la fenêtre ne peut s'afficher
 
+SDL_Rect createRect(int x, int y, int w, int h) {
+	SDL_Rect rectangle;
+	rectangle.x = x;
+	rectangle.y = y;
+	rectangle.w = w;
+	rectangle.h = h;
+
+	return rectangle;
+}
+
 int main(int argc, char *argv[])
 {
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 	int continuer = 1;
-	int width = 500;
-	int height = 500;
 	
-
-	SDL_Rect rectangle1; // creation des coordonnées du rectangle
-	rectangle1.x = 5;
-	rectangle1.y = 200;
-	rectangle1.w = 2;
-	rectangle1.h = 70;
-
-	SDL_Rect rectangle2; // creation des coordonnées du rectangle
-	rectangle2.x = 490;
-	rectangle2.y = 200;
-	rectangle2.w = 2;
-	rectangle2.h = 70;
-
-
+	int largeur = 2;
+	int longueur = 70;
+	int vitesse_raquette = 1;
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		SDL_ExitWithError("initialisation SDL");
 
 	//création fenêtre + rendu
-
-	if (SDL_CreateWindowAndRenderer(width,height, 0, &window, &renderer) != 0) 
+	int width = 0;
+	int height = 0;
+	// ici on initialise la fenetre en fullscreen
+	if (SDL_CreateWindowAndRenderer(width,height, SDL_WINDOW_FULLSCREEN, &window, &renderer) != 0) 
 		SDL_ExitWithError("Impossible de creer rendu et fenêtre");
+	// on recupere la taille de la fenetre
+	width = SDL_GetWindowSurface(window)->w;
+	height = SDL_GetWindowSurface(window)->h;
+
+	SDL_Rect rectangle1 = createRect(20, 200, largeur, longueur); // creation des coordonnées du rectangle
+	SDL_Rect rectangle2 = createRect(width-20, 200, largeur, longueur); // creation des coordonnées du rectangle
 
 
 	while(continuer)
 	{
 		SDL_Event evenement; //tous nos evenements seront gérés à partir de cette ligne
-
+		
+		
 		while(SDL_PollEvent(&evenement))//fonction qui va capturer, enregistrer tous les evenements
 		{
+
 			switch(evenement.type)
 			{	
+
 				case SDL_QUIT:
 					continuer = 0;
 				case SDL_KEYDOWN:
@@ -62,43 +70,80 @@ int main(int argc, char *argv[])
 						case SDLK_ESCAPE: //fermeture de la fenetre via la touche echap
 							continuer = 0;
 						break;
-
+						// on verifie qu'on peut faire le mouvement sinon on teleporte
+						
 						case SDLK_z:
-							rectangle1.y -= 20;
+							if(rectangle1.y <= 0){
+								rectangle1.y = height-longueur;
+							}
+							else {
+								rectangle1.y -= vitesse_raquette;
+							}
 						break;
 
 						case SDLK_s:
-							rectangle1.y += 20;
+							if(rectangle1.y >= height){
+								rectangle1.y = 0;
+							}
+							else {
+								rectangle1.y += vitesse_raquette;
+							}
 						break;
 
 						case SDLK_UP:
-							rectangle2.y -=20;
+							if(rectangle2.y <= 0){
+								rectangle2.y = height-longueur;
+							}
+							else {
+								rectangle2.y -=vitesse_raquette;
+							}
 						break;
 
 						case SDLK_DOWN:
-							rectangle2.y +=20;
+							if(rectangle2.y >= height){
+								rectangle2.y = 0;
+							}		
+							else {
+								rectangle2.y +=vitesse_raquette;
+							}
 					}
 				case SDL_KEYUP:
 					switch(evenement.key.keysym.sym)
 					{
-						case SDLK_z:
-							rectangle1.y -= 20;
-						break;
-
-						case SDLK_s:
-							rectangle1.y += 20;
-						break;
-
-						case SDLK_UP:
-							rectangle2.y -=20;
-						break;
-
-						case SDLK_DOWN:
-							rectangle2.y +=20;
-					}
-
+			case SDLK_z:
+				if(rectangle1.y <= 0){
+					rectangle1.y = height-longueur;
+				}
+				else {
+					rectangle1.y -= 20;
+				}
+			break;
+			case SDLK_s:
+				if(rectangle1.y >= height){
+					rectangle1.y = longueur;
+				}
+				else {
+					rectangle1.y += 20;
+				}
+			break;
+			case SDLK_UP:
+				if(rectangle2.y <= 0){
+					rectangle2.y = height-longueur;
+				}
+				else {
+					rectangle2.y -=20;
+				}
+			break;
+			case SDLK_DOWN:
+				if(rectangle2.y >= height-longueur){
+					rectangle2.y = longueur;
+				}		
+				else {
+					rectangle2.y +=20;
+				}
 			}
 		}
+	}
 		
 
 
@@ -114,14 +159,6 @@ int main(int argc, char *argv[])
 
 		if (SDL_RenderFillRect(renderer,&rectangle2) !=0 )
 			SDL_ExitWithError("Impossible de creer le rectangle de droite");
-
-	//if ((rectangle1.y > height || rectangle2.y > height))
-	//{
-	//	return ; // pas de collision
-	//}
-	//else{
-	//	return ; // collision
-	//}
 
 		SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer	
 	}
