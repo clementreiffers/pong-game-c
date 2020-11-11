@@ -19,18 +19,20 @@ int main(int argc, char *argv[])
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 	int continuer = 1;
+	int width = 500;
+	int height = 500;
 	
 
 	SDL_Rect rectangle1; // creation des coordonnées du rectangle
-	rectangle1.x = 50;
-	rectangle1.y = 300;
-	rectangle1.w = 20;
+	rectangle1.x = 5;
+	rectangle1.y = 200;
+	rectangle1.w = 2;
 	rectangle1.h = 70;
 
 	SDL_Rect rectangle2; // creation des coordonnées du rectangle
-	rectangle2.x = 1430;
-	rectangle2.y = 300;
-	rectangle2.w = 20;
+	rectangle2.x = 490;
+	rectangle2.y = 200;
+	rectangle2.w = 2;
 	rectangle2.h = 70;
 
 
@@ -40,7 +42,7 @@ int main(int argc, char *argv[])
 
 	//création fenêtre + rendu
 
-	if (SDL_CreateWindowAndRenderer(1500,900, 0, &window, &renderer) != 0) 
+	if (SDL_CreateWindowAndRenderer(width,height, 0, &window, &renderer) != 0) 
 		SDL_ExitWithError("Impossible de creer rendu et fenêtre");
 
 
@@ -58,7 +60,6 @@ int main(int argc, char *argv[])
 					switch(evenement.key.keysym.sym)
 					{
 						case SDLK_ESCAPE: //fermeture de la fenetre via la touche echap
-						case SDLK_q:
 							continuer = 0;
 						break;
 
@@ -98,9 +99,12 @@ int main(int argc, char *argv[])
 
 			}
 		}
+		
+
+
 		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
 		SDL_RenderClear(renderer);
-		SDL_SetRenderDrawColor(renderer,0,0,0,0);
+
 
 		if (SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE) !=0)
 			SDL_ExitWithError("Il n'est pas possible de changer la couleur");
@@ -111,6 +115,13 @@ int main(int argc, char *argv[])
 		if (SDL_RenderFillRect(renderer,&rectangle2) !=0 )
 			SDL_ExitWithError("Impossible de creer le rectangle de droite");
 
+	//if ((rectangle1.y > height || rectangle2.y > height))
+	//{
+	//	return ; // pas de collision
+	//}
+	//else{
+	//	return ; // collision
+	//}
 
 		SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer	
 	}
