@@ -1,5 +1,18 @@
 #include <SDL2/SDL.h>
 
-void ellipse(SDL_Renderer* r, int x0, int y0, int radiusX, int radiusY); // fonction qui cree nos ellipses
-SDL_Rect createRect(int x, int y, int w, int h); // fonction qui cree notre rectangle
-void compteur(SDL_Renderer* r, float w, float h);
+typedef struct Raquettes raquettes;
+struct Raquettes
+{
+	int y1;
+	int y2;
+};
+
+void SDL_ExitWithError(const char *message);
+
+void ellipse(SDL_Renderer*, int, int, int, int); // fonction qui cree nos ellipses
+
+SDL_Rect createRect(int, int, int, int); // fonction qui cree notre rectangle
+raquettes deplacement(SDL_Renderer*, SDL_Rect, SDL_Rect, float, float);
+int exitOrNot();
+
+void compteur(SDL_Renderer*, float, float);
