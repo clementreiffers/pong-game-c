@@ -2,6 +2,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+
+#include "formes.h"
 /*
 	les differents types rendus:
 
@@ -13,8 +15,6 @@
 
 void SDL_ExitWithError(const char *message); //fonction creee pour afficher un message lorsque la fenêtre ne peut s'afficher
 SDL_Rect createRect(int x, int y, int w, int h); // fonction qui cree notre rectangle
-void ellipse(SDL_Renderer* r, int x0, int y0, int radiusX, int radiusY); // fonction qui cree nos ellipses
-void compteur(SDL_Renderer* r, float w, float y); // fonction qui cree notre compteur
 
 int main(int argc, char *argv[])
 {
@@ -178,9 +178,9 @@ int main(int argc, char *argv[])
 
         y<=0+r || y>=height-r ? sy=-sy, dy = sy: 1; // * ((rand()%3)+1): 1;
 		// rebond de la balle sur la raquette gauche
-		x<=rectangle1.x+largeur && y >=rectangle1.y && y<= rectangle1.y+longueur ? sx=-sx, dx = sx * ((rand()%3)+1) : 1;
+		x<=rectangle1.x+largeur && y >=rectangle1.y && y<= rectangle1.y+longueur ? sx=-sx, dx = sx:1;// * ((rand()%3)+1) : 1;
 		// rebond raquette droite
-		x>=rectangle2.x && y >= rectangle2.y && y<=rectangle2.y+longueur ? sx=-sx, dx = sx * ((rand()%3)+1) : 1;
+		x>=rectangle2.x && y >= rectangle2.y && y<=rectangle2.y+longueur ? sx=-sx, dx = sx :1;//* ((rand()%3)+1) : 1;
 		
 		// au cas où la balle va là où on ne veut pas
 		if (x>rectangle2.x+longueur) {
@@ -211,68 +211,4 @@ void SDL_ExitWithError(const char *message)
 	SDL_Log("ERREUR : %s > %s\n", message, SDL_GetError()); //il va afficher l'erreur
 	SDL_Quit();// si SDL n'a pas réussi à être initialiser par exemple, on va quiter SDL
 	exit(EXIT_FAILURE);
-}
-SDL_Rect createRect(int x, int y, int w, int h) {
-	SDL_Rect rectangle;
-	rectangle.x = x;
-	rectangle.y = y;
-	rectangle.w = w;
-	rectangle.h = h;
-
-	return rectangle;
-}
-void ellipse(SDL_Renderer* r, int x0, int y0, int radiusX, int radiusY)
-{
-    float pi  = 3.14159265358979323846264338327950288419716939937510;
-    float pih = pi / 2.0; //half of pi
-
-    //drew  28 lines with   4x4  circle with precision of 150 0ms
-    //drew 132 lines with  25x14 circle with precision of 150 0ms
-    //drew 152 lines with 100x50 circle with precision of 150 3ms
-    const int prec = 27; // precision value; value of 1 will draw a diamond, 27 makes pretty smooth circles.
-    float theta = 0;     // angle that will be increased each loop
-
-    //starting point
-    int x  = (float)radiusX * cos(theta);//start point
-    int y  = (float)radiusY * sin(theta);//start point
-    int x1 = x;
-    int y1 = y;
-
-    //repeat until theta >= 90;
-    float step = pih/(float)prec; // amount to add to theta each time (degrees)
-    for(theta=step;  theta <= pih;  theta+=step)//step through only a 90 arc (1 quadrant)
-    {
-        //get new point location
-        x1 = (float)radiusX * cosf(theta) + 0.5; //new point (+.5 is a quick rounding method)
-        y1 = (float)radiusY * sinf(theta) + 0.5; //new point (+.5 is a quick rounding method)
-
-        //draw line from previous point to new point, ONLY if point incremented
-        if( (x != x1) || (y != y1) )//only draw if coordinate changed
-        {
-            SDL_RenderDrawLine(r, x0 + x, y0 - y,    x0 + x1, y0 - y1 );//quadrant TR
-            SDL_RenderDrawLine(r, x0 - x, y0 - y,    x0 - x1, y0 - y1 );//quadrant TL
-            SDL_RenderDrawLine(r, x0 - x, y0 + y,    x0 - x1, y0 + y1 );//quadrant BL
-            SDL_RenderDrawLine(r, x0 + x, y0 + y,    x0 + x1, y0 + y1 );//quadrant BR
-        }
-        //save previous points
-        x = x1;//save new previous point
-        y = y1;//save new previous point
-    }
-    //arc did not finish because of rounding, so finish the arc
-    if(x!=0)
-    {
-        x=0;
-        SDL_RenderDrawLine(r, x0 + x, y0 - y,    x0 + x1, y0 - y1 );//quadrant TR
-        SDL_RenderDrawLine(r, x0 - x, y0 - y,    x0 - x1, y0 - y1 );//quadrant TL
-        SDL_RenderDrawLine(r, x0 - x, y0 + y,    x0 - x1, y0 + y1 );//quadrant BL
-        SDL_RenderDrawLine(r, x0 + x, y0 + y,    x0 + x1, y0 + y1 );//quadrant BR
-    }
-}
-void compteur(SDL_Renderer* r, float w, float h){
-    SDL_RenderDrawLine(r, w/2-100, 0, w/2-100, h/15);
-    SDL_RenderDrawLine(r, w/2+100, 0, w/2+100, h/15);
-    SDL_RenderDrawLine(r, w/2-100, h/15, w/2+100, h/15);
-
-	/* ajouter le texte à mettre dans la fenetre ici */
-
 }
