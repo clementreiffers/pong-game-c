@@ -89,6 +89,7 @@ raquettes deplacement(SDL_Renderer* renderer, SDL_Rect rectangle1, SDL_Rect rect
 							else {
 								rectangle2.y +=dy;
 							}
+						break;
 					}
 				case SDL_KEYUP:
 					switch(evenement.key.keysym.sym)
