@@ -1,6 +1,7 @@
 #include <SDL2/SDL.h>
 #include "formes.h"
 #include<stdio.h>
+#include<SDL2/SDL_ttf.h>
 int menu(SDL_Window *window, SDL_Renderer *renderer) {
     
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -23,7 +24,23 @@ int menu(SDL_Window *window, SDL_Renderer *renderer) {
     int choix = 0;
 	int continuer = 1;
 	int x = width/3.3-50, y= height/4.3 , r = 10;
-	
+	TTF_Init();
+	TTF_Font * font = TTF_OpenFont("Digit.ttf", 25);
+    SDL_Color color = { 0, 0, 0 };
+    SDL_Surface * rectfacile = TTF_RenderText_Solid(font, "Mode Debutant", color);
+    SDL_Texture * texfacile = SDL_CreateTextureFromSurface(renderer, rectfacile);
+
+	SDL_Surface * rectnorm = TTF_RenderText_Solid(font, "Mode Normal", color);
+    SDL_Texture * texnorm = SDL_CreateTextureFromSurface(renderer, rectnorm);
+	SDL_Surface * rectdiff = TTF_RenderText_Solid(font, "Mode Debutant", color);
+    SDL_Texture * texdiff = SDL_CreateTextureFromSurface(renderer, rectdiff);
+    int texW = 0;
+    int texH = 0;
+	SDL_QueryTexture(texfacile, NULL, NULL, &texW, &texH);
+    SDL_QueryTexture(texnorm, NULL, NULL, &texW, &texH);
+    SDL_QueryTexture(texdiff, NULL, NULL, &texW, &texH);
+
+
 	while(continuer) {
 		// on affiche les menus
 		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
@@ -83,11 +100,25 @@ int menu(SDL_Window *window, SDL_Renderer *renderer) {
 			}
 		}
 
-        ellipse(renderer, x, y, r, r);
+		SDL_RenderCopy(renderer, texfacile, NULL, &facile);
+		SDL_RenderCopy(renderer, texnorm, NULL, &normal);
+		SDL_RenderCopy(renderer, texdiff, NULL, &hardcore);
 
+        ellipse(renderer, x, y, r, r);
 
 		SDL_RenderPresent(renderer); 
 
 	}
+	SDL_DestroyTexture(texfacile);
+	SDL_DestroyTexture(texnorm);
+	SDL_DestroyTexture(texdiff);
+    SDL_FreeSurface(rectfacile);
+    SDL_FreeSurface(rectnorm);
+    SDL_FreeSurface(rectdiff);
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
     return choix;
 }
