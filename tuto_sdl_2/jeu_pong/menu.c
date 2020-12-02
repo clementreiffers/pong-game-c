@@ -27,19 +27,22 @@ int menu(SDL_Window *window, SDL_Renderer *renderer) {
 	TTF_Init();
 	TTF_Font * font = TTF_OpenFont("Digit.ttf", 25);
     SDL_Color color = { 0, 0, 0 };
+	SDL_Color white = {255, 255, 255};
     SDL_Surface * rectfacile = TTF_RenderText_Solid(font, "Mode Debutant", color);
     SDL_Texture * texfacile = SDL_CreateTextureFromSurface(renderer, rectfacile);
 
 	SDL_Surface * rectnorm = TTF_RenderText_Solid(font, "Mode Normal", color);
     SDL_Texture * texnorm = SDL_CreateTextureFromSurface(renderer, rectnorm);
-	SDL_Surface * rectdiff = TTF_RenderText_Solid(font, "Mode Debutant", color);
+	SDL_Surface * rectdiff = TTF_RenderText_Solid(font, "Mode Difficile", color);
     SDL_Texture * texdiff = SDL_CreateTextureFromSurface(renderer, rectdiff);
+	SDL_Surface * rectquit = TTF_RenderText_Solid(font, "Quitter", white);
+    SDL_Texture * texquit = SDL_CreateTextureFromSurface(renderer, rectquit);
     int texW = 0;
     int texH = 0;
 	SDL_QueryTexture(texfacile, NULL, NULL, &texW, &texH);
     SDL_QueryTexture(texnorm, NULL, NULL, &texW, &texH);
     SDL_QueryTexture(texdiff, NULL, NULL, &texW, &texH);
-
+    SDL_QueryTexture(texquit, NULL, NULL, &texW, &texH);
 
 	while(continuer) {
 		// on affiche les menus
@@ -103,6 +106,7 @@ int menu(SDL_Window *window, SDL_Renderer *renderer) {
 		SDL_RenderCopy(renderer, texfacile, NULL, &facile);
 		SDL_RenderCopy(renderer, texnorm, NULL, &normal);
 		SDL_RenderCopy(renderer, texdiff, NULL, &hardcore);
+		SDL_RenderCopy(renderer, texquit, NULL, &quitter);
 
         ellipse(renderer, x, y, r, r);
 

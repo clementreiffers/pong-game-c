@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "jeu_pong.h"
 #include "formes.h"
@@ -22,18 +23,22 @@ int main(int argc, char *argv[])
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 
 	int choix = menu(window, renderer);
+	int gagnant = 0;
 	if(choix == 0) {
 		//mode facile
-		pong(window, renderer, 0.5, 0.5, 0.5);
+		gagnant = pong(window, renderer, 0.5, 0.5, 0.5);
 	}
 	if(choix == 1) {
 		//mode normal
-		pong(window, renderer, 1, 1, 1);
+		gagnant = pong(window, renderer, 1, 1, 1);
 	}
 	if(choix == 2) {
 		//mode harcore
-		pong(window, renderer, 2, 2, 2);
+		gagnant = pong(window, renderer, 2, 2, 2);
 	}
+	printf("le gagnant est %d", gagnant);
+	gagnant == 1 ? afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 1") : afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 2");
+	
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);

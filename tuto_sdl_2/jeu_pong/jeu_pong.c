@@ -1,8 +1,9 @@
 #include <SDL2/SDL.h>
+#include<SDL2/SDL_ttf.h>
 #include "formes.h"
 #include <stdio.h>
 
-void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float vitesse_raquette){
+int pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float vitesse_raquette){
     int continuer = 1;
 	// dimension des raquettes et sa vitesse
 	int largeur = 5;
@@ -10,7 +11,6 @@ void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float 
 	//lancement SDL
 	if (SDL_Init(SDL_INIT_VIDEO) != 0)
 		SDL_ExitWithError("initialisation SDL");
-
 	//création fenêtre + rendu
 	int width = 0;
 	int height = 0;
@@ -20,6 +20,7 @@ void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float 
 	// on recupere la taille de la fenetre
 	width = SDL_GetWindowSurface(window)->w;
 	height = SDL_GetWindowSurface(window)->h;
+
 
 	// on cree les deux raquettes et on les places en fonction de la taille de l'écran
 	SDL_Rect rectangle1 = createRect(20, 200, largeur, longueur); // creation des coordonnées du rectangle
@@ -36,6 +37,10 @@ void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float 
     //float dy = (rand() % 3)+1; // sa norme en vitesse en y
 	int sy = 1; // son signe en y
     int r = 5; // son rayon
+	TTF_Init();
+	TTF_Font * font = TTF_OpenFont("Digit.ttf", 25);
+	SDL_Color white = { 255, 255, 255 };
+
     while(continuer)
 	{
 		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
@@ -56,7 +61,32 @@ void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float 
 			SDL_ExitWithError("Impossible de creer le rectangle de droite");
         // on dessine le terrain
         compteur(renderer, width, height);
-        ellipse(renderer, width/2, height/2, width/6,width/6);
+        SDL_Rect rJ1 = {width/2-50,0,50,50};
+		SDL_Rect rJ2 = {width/2+50,0,50,50};
+		SDL_SetRenderDrawColor(renderer, 0, 0, 0, SDL_ALPHA_OPAQUE);
+		SDL_RenderFillRect(renderer,&rJ1);
+		SDL_RenderFillRect(renderer,&rJ2);
+		SDL_SetRenderDrawColor(renderer, 255, 255, 255, SDL_ALPHA_OPAQUE);
+		char strJ1[2];
+		sprintf(strJ1, "%d", J1);
+
+		char strJ2[2];
+		sprintf(strJ2, "%d", J2);
+
+		SDL_Surface * surfJ1 = TTF_RenderText_Solid(font,  strJ1, white);
+		SDL_Texture * texJ1 = SDL_CreateTextureFromSurface(renderer, surfJ1);
+		SDL_Surface * surfJ2 = TTF_RenderText_Solid(font, strJ2, white);
+		SDL_Texture * texJ2 = SDL_CreateTextureFromSurface(renderer, surfJ2);
+
+		int texW = 0;
+		int texH = 0;
+		SDL_QueryTexture(texJ1, NULL, NULL, &texW, &texH);
+		SDL_QueryTexture(texJ2, NULL, NULL, &texW, &texH);
+
+		SDL_RenderCopy(renderer, texJ1, NULL, &rJ1);
+		SDL_RenderCopy(renderer, texJ2, NULL, &rJ2);
+
+		ellipse(renderer, width/2, height/2, width/6,width/6);
         SDL_RenderDrawLine(renderer, width/2, 0, width/2, height);
 
         // on dessine la balle et on gère ses évènements
@@ -85,6 +115,20 @@ void pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float 
 			x = width/2;
 			y = height/2;
     	}
+		if (J1>8) {
+			continuer = 0;
+		}
+		if (J2>8) {
+			continuer = 0;
+		}
 		SDL_RenderPresent(renderer); //fonction qui affiche le rendu et va prendre en paramètre renderer	
 	}
+
+    TTF_CloseFont(font);
+    SDL_DestroyRenderer(renderer);
+    SDL_DestroyWindow(window);
+    TTF_Quit();
+    SDL_Quit();
+	int gagnant = J1>8 ?  1 :  2; 
+	return gagnant;
 }
