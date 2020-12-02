@@ -22,16 +22,20 @@ void afficher_gagnant(SDL_Window *window, SDL_Renderer* renderer, char* phrase, 
     while (!quit)
     {
    		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
-        SDL_RenderClear(renderer);
-        SDL_WaitEvent(&event);
-        switch (event.type)
-        {
-            case SDL_QUIT:
-                quit = 1;
-            break;
-        }
         SDL_RenderCopy(renderer, texture, NULL, &dstrect);
         SDL_RenderPresent(renderer);
+        SDL_WaitEvent(&event);
+		switch(event.type)
+		{
+			case SDL_KEYDOWN:
+				switch(event.key.keysym.sym)
+				{
+				case SDLK_ESCAPE: //fermeture de la fenetre via la touche echap
+						quit = 1;
+				break;
+			}
+		break;
+		}
     }
     SDL_DestroyTexture(texture);
     SDL_FreeSurface(surface);
