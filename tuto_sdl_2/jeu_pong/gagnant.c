@@ -3,18 +3,8 @@
 #include<stdio.h>
 
 
-void afficher_gagnant(SDL_Window *window, SDL_Renderer* renderer, char* phrase)
+void afficher_gagnant(SDL_Window *window, SDL_Renderer* renderer, char* phrase, float width, float height)
 {
-    SDL_Init(SDL_INIT_VIDEO);
-	//création fenêtre + rendu
-	int width = 0;
-	int height = 0;
-	// ici on initialise la fenetre en fullscreen
-	SDL_CreateWindowAndRenderer(width,height, SDL_WINDOW_MAXIMIZED, &window, &renderer);
-    // on recupere la taille de la fenetre
-	width = SDL_GetWindowSurface(window)->w;
-	height = SDL_GetWindowSurface(window)->h;
-
     int quit = 0;
     SDL_Event event;
 
@@ -28,9 +18,11 @@ void afficher_gagnant(SDL_Window *window, SDL_Renderer* renderer, char* phrase)
     int texW = 300;
     int texH = 100;
     SDL_QueryTexture(texture, NULL, NULL, &texW, &texH);
-    SDL_Rect dstrect = { width/3, height/2, 600, 100 };
+    SDL_Rect dstrect = { width/4, height/3, 700, 100 };
     while (!quit)
     {
+   		SDL_SetRenderDrawColor(renderer, 0,0,0,0);
+        SDL_RenderClear(renderer);
         SDL_WaitEvent(&event);
         switch (event.type)
         {

@@ -22,22 +22,33 @@ int main(int argc, char *argv[])
 	SDL_Window *window = NULL; //pointeur par défaut pour la fenêtre
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 
-	int choix = menu(window, renderer);
+	//lancement SDL
+	SDL_Init(SDL_INIT_VIDEO);
+	//création fenêtre + rendu
+	int width = 0;
+	int height = 0;
+	// ici on initialise la fenetre en fullscreen
+	SDL_CreateWindowAndRenderer(width,height, SDL_WINDOW_FULLSCREEN, &window, &renderer);
+	// on recupere la taille de la fenetre
+	width = SDL_GetWindowSurface(window)->w;
+	height = SDL_GetWindowSurface(window)->h;
+
+
+	int choix = menu(window, renderer, width, height);
 	int gagnant = 0;
 	if(choix == 0) {
 		//mode facile
-		gagnant = pong(window, renderer, 0.5, 0.5, 0.5);
+		gagnant = pong(window, renderer, 0.5, 0.5, 0.5, width, height);
 	}
 	if(choix == 1) {
 		//mode normal
-		gagnant = pong(window, renderer, 1, 1, 1);
+		gagnant = pong(window, renderer, 1, 1, 1, width, height);
 	}
 	if(choix == 2) {
 		//mode harcore
-		gagnant = pong(window, renderer, 2, 2, 2);
+		gagnant = pong(window, renderer, 2, 2, 2, width, height);
 	}
-	printf("le gagnant est %d", gagnant);
-	gagnant == 1 ? afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 1") : afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 2");
+	gagnant == 1 ? afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 1", width, height) : afficher_gagnant(window, renderer, "BRAVO AU JOUEUR 2", width, height);
 	
 
 	SDL_DestroyRenderer(renderer);
