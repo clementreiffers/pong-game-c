@@ -2,14 +2,14 @@
 #include <SDL2/SDL_ttf.h>
 #include<stdio.h>
 
-
+// on affiche le gagnant sur l'écran, voir menu.c pour savoir à quoi servent les fonctions
 void afficher_gagnant(SDL_Window *window, SDL_Renderer* renderer, char* phrase, float width, float height)
 {
     int quit = 0;
     SDL_Event event;
 
     TTF_Init();
-    TTF_Font * font = TTF_OpenFont("Digit.ttf", 25);
+    TTF_Font * font = TTF_OpenFont("Lazer84.ttf", 25);
     SDL_Color color = { 255, 255, 255 };
 
     SDL_Surface * surface = TTF_RenderText_Solid(font, phrase, color);
