@@ -3,10 +3,17 @@
 #include <stdlib.h>
 #include <math.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "jeu_pong.h"
 #include "formes.h"
 #include "menu.h"
+
+// Our wave file
+Mix_Chunk *wave = NULL;
+// Our music file
+Mix_Music *music = NULL;
+
 /*
 	les differents types rendus:
 
@@ -23,12 +30,21 @@ int main(int argc, char *argv[])
 	SDL_Renderer *renderer = NULL; //pointeur qui va créer un rendu
 
 	//lancement SDL
-	SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO);
 	//création fenêtre + rendu
 	int width = 0;
 	int height = 0;
 	// ici on initialise la fenetre en fullscreen
 	SDL_CreateWindowAndRenderer(width,height, SDL_WINDOW_FULLSCREEN, &window, &renderer);
+
+	//initialisation de la musique
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	Mix_Music *backgroundSound = Mix_LoadMUS("musique_de_fond.wav");
+
+	Mix_PlayMusic(backgroundSound, -1);
+
+//--------------------------------------
 	// on recupere la taille de la fenetre
 	width = SDL_GetWindowSurface(window)->w;
 	height = SDL_GetWindowSurface(window)->h;
@@ -53,6 +69,7 @@ int main(int argc, char *argv[])
 
 	SDL_DestroyRenderer(renderer);
 	SDL_DestroyWindow(window);
+	Mix_FreeMusic(backgroundSound);
 	SDL_Quit();
 
 	return EXIT_SUCCESS;

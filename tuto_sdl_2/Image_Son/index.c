@@ -1,49 +1,111 @@
+#include <stdio.h>
+#include <stdlib.h>
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
 
-#define WAV_PATH "bass.wav"
-#define MUS_PATH "bass.wav"
+//#define WAV_PATH "musique_de_fond.wav"
+//#define MUS_PATH "musique_de_fond.wav"
 
 // Our wave file
 Mix_Chunk *wave = NULL;
 // Our music file
 Mix_Music *music = NULL;
 
+void SDL_ExitWithError(const char *message);
 
-int main(int argc, char* argv[]){
 
-	// Initialize SDL.
-	if (SDL_Init(SDL_INIT_AUDIO) < 0)
-		return -1;
-			
-	//Initialize SDL_mixer 
-	if( Mix_OpenAudio( 22050, MIX_DEFAULT_FORMAT, 2, 4096 ) == -1 ) 
-		return -1; 
-	
-	// Load our sound effect
-	wave = Mix_LoadWAV(WAV_PATH);
-	if (wave == NULL)
-		return -1;
-	
-	// Load our music
-	music = Mix_LoadMUS(MUS_PATH);
-	if (music == NULL)
-		return -1;
-	
-	if ( Mix_PlayChannel(-1, wave, 0) == -1 )
-		return -1;
-	
-	if ( Mix_PlayMusic( music, -1) == -1 )
-		return -1;
+
+int main(int argc, char* argv[])
+
+{
+	SDL_Window *window = NULL;
+	SDL_Renderer *renderer = NULL;
+
 		
-	while ( Mix_PlayingMusic() ) ;
-	
-	// clean up our resources
-	Mix_FreeChunk(wave);
-	Mix_FreeMusic(music);
-	
-	// quit SDL_mixer
-	Mix_CloseAudio();
-	
-	return 0;
+
+	//lancement SDL
+	if(SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) !=0 )
+		SDL_ExitWithError("Initialisation SDL");
+
+	//vrétaion fenêtre et rendu
+	if(SDL_CreateWindowAndRenderer(1920, 1080, 0, &window, &renderer) !=0)
+		SDL_ExitWithError("Impossible de creer la fenetre et le rendu");
+
+
+	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
+
+	Mix_Music *backgroundSound = Mix_LoadMUS("musique_de_fond.wav");
+
+	Mix_PlayMusic(backgroundSound, -1);
+//---------------------------------------------------------------------------------------
+
+SDL_Surface *image = NULL;
+SDL_Texture *texture = NULL;
+
+image = SDL_LoadBMP("Arcade.bmp");
+
+if(image == NULL)
+{
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_ExitWithError("Impossible de charger l'image");
+
+
 }
+
+texture = SDL_CreateTextureFromSurface(renderer, image);
+SDL_FreeSurface(image);
+
+if(texture == NULL)
+{
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_ExitWithError("Impossible de charger la texture");
+}
+
+SDL_Rect rectangle;
+
+if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) !=0)
+{
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_ExitWithError("Impossible de charger la texture");
+}
+
+rectangle.x = (1980 - rectangle.w)/2;
+rectangle.y = (1080 - rectangle.h)/2;
+
+if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) !=0)
+{
+	SDL_DestroyRenderer(renderer);
+	SDL_DestroyWindow(window);
+	SDL_ExitWithError("Impossible d'afficher la texture");
+
+}
+
+SDL_RenderPresent(renderer);
+
+SDL_Delay(6000);
+
+
+//----------------------------------------------------------------------------------------
+
+SDL_DestroyTexture(texture);
+SDL_DestroyRenderer(renderer);
+SDL_DestroyWindow(window);
+Mix_FreeMusic(backgroundSound);
+SDL_Quit();
+
+return EXIT_SUCCESS;
+
+}
+
+void SDL_ExitWithError(const char *message)
+{
+	SDL_Log("Erreur : %s > %s\n", message, SDL_GetError());
+	SDL_Quit();
+	exit(EXIT_FAILURE);
+}
+
+
+

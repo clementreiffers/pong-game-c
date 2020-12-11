@@ -1,8 +1,20 @@
 #include <SDL2/SDL.h>
 #include "formes.h"
 #include<stdio.h>
+#include <stdlib.h>
 #include<SDL2/SDL_ttf.h>
+
+
 int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) {
+	//initialisation du fond d'ecran
+	SDL_Surface *image = NULL;
+	SDL_Texture *texture = NULL;
+	image == NULL;
+	image = SDL_LoadBMP("Arcade.bmp");
+	texture = SDL_CreateTextureFromSurface(renderer, image);
+	texture == NULL;
+	SDL_Rect rectangle;
+	
     // rectangles qui nous servirons pour les menus
 	SDL_Rect facile = { width/3, height/5, width/3, height/15};
 	SDL_Rect normal =  { width/3, height/5 + 2* height/15, width/3, height/15};
@@ -14,8 +26,8 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 	int x = width/3.3-50, y= height/4.3 , r = 10; // caracteristiques pour le cercle du menu
 	TTF_Init(); // on initialise la biblio SDL2_TTF
 	TTF_Font * font = TTF_OpenFont("Lazer84.ttf", 25); // tu mets la police
-    SDL_Color color = { 0, 0, 0 }; // on definie la couleur noire et blanche
-	SDL_Color white = { 255, 255, 255 };
+    SDL_Color color = { 224, 224, 224 }; // on definie la couleur noire et blanche
+	SDL_Color white = { 255, 0, 0 };
 
 	// on cree les ecritures et les textures
     SDL_Surface * rectfacile = TTF_RenderText_Solid(font, "Mode Debutant", color);
@@ -28,10 +40,14 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
     SDL_Texture * texquit = SDL_CreateTextureFromSurface(renderer, rectquit);
 
 	// on met la taille de la texture (notamment celle de la police)
+	SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
 	SDL_QueryTexture(texfacile, NULL, NULL, 0, 0);
     SDL_QueryTexture(texnorm, NULL, NULL, 0, 0);
     SDL_QueryTexture(texdiff, NULL, NULL, 0, 0);
     SDL_QueryTexture(texquit, NULL, NULL, 0, 0);
+
+	rectangle.x = (width- rectangle.w)/2;
+	rectangle.y = (height - rectangle.h)/2;
 
 	while(continuer) {
 		// on affiche les menus
@@ -86,10 +102,12 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 			}
 		}
 		// on applique la texture à nos rectangles
+		SDL_RenderCopy(renderer, texture, NULL, &rectangle);
 		SDL_RenderCopy(renderer, texfacile, NULL, &facile);
 		SDL_RenderCopy(renderer, texnorm, NULL, &normal);
 		SDL_RenderCopy(renderer, texdiff, NULL, &hardcore);
 		SDL_RenderCopy(renderer, texquit, NULL, &quitter);
+		
 
 		// on affiche le cercle qu'on contrôle avec les fleches du clavier
         ellipse(renderer, x, y, r, r);
@@ -99,9 +117,11 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 
 	}
 	// on détruit ce qu'on n'a plus besoin
+	
 	SDL_DestroyTexture(texfacile);
 	SDL_DestroyTexture(texnorm);
 	SDL_DestroyTexture(texdiff);
+	SDL_DestroyTexture(texture);
     SDL_FreeSurface(rectfacile);
     SDL_FreeSurface(rectnorm);
     SDL_FreeSurface(rectdiff);
