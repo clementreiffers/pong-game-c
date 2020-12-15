@@ -6,9 +6,16 @@ We has chosen to code our **pong game**.
 
 ## How to launch this game
 
-For now, this game works only on Windows.
+For now, this game works only on Windows, but for **linux users**, you can install Wine:
+```bash
+sudo apt install wine
+```
 There is a **main.exe** file in jeu_pong folder.
 You must launch this app to play the game.
+For Windows users, just click on this compilation, and for linux users, just executes the command :
+```bash
+wine main.exe
+```
 
 ## How to compile this game
 
