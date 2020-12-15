@@ -1,32 +1,42 @@
-# parcours_innovation
+# jeu_pong
 
-Pour ce parcours, nous devons coder des jeux en C.
+For the innovation course in the esme sudria, they ask us to conceive a game in c language. 
+We has chosen to code our **pong game**.
+*This project is realised by Clément Reiffers and Owen Locqueneux*
 
-## Rappel des commandes GitHub
+## How to launch this game
 
-pour mettre version de code en ligne :
--   git add .
--   git commit -m "ton commentaire"
--   git push origin master
+For now, this game works only on Windows.
+There is a **main.exe** file in jeu_pong folder.
+You must launch this app to play the game.
 
-pour avoir l'historique des commit :
--   git log 
+## How to compile this game
 
-pour avoir la derniere version qui est en ligne :
--   git pull origin master
+There is a **Makefile** in jeu_pong folder.
+You just have to mark "make" in the terminal to compile him.
+if you haven't installed make software, go install him !
+Makefile executes these commands :
+```bash
+gcc -std=c17 ellipse.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 
 
-Les parties de code qui seront faites en local seront fusionnées avec les parties de code hébergés.
+gcc -std=c17 raquette.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 
 
-## Rappel pour compiler un programme en C
+gcc -std=c17 compteur.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 
 
--   gcc <nom_du_programme>.c
--   ./a.out
+gcc -std=c17 jeu_pong.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_mixer 
 
-les erreurs de code éventuelles seront précisées par le compilateur.
+gcc -std=c17 menu.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
 
-## Historique des programmes codés
--   HelloWorld
+gcc -std=c17 gagnant.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf
 
-## Projets convoîtés
+gcc -std=c17 main.c ellipse.o raquette.o compteur.o jeu_pong.o menu.o gagnant.o -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_mixer -o main
 
-Nous sommes partis pour concevoir un jeu de Pong en C.
+```
+
+## Different Files
+There is some files which permit to compile this game, like :
+-   menu.c $\rightarrow$ to know the exactly choice of what player wants
+-   jeu_pong.c $\rightarrow$ it's just the game, but we give him some settings to regulate difficulty 
+-   main.c $\rightarrow$ it's just a bridge between the player's choice and the game, so it's the main file
+-   compteur.c $\rightarrow$ to draw the counter
+-   ellipse.c $\rightarrow$ to draw circles in the game
