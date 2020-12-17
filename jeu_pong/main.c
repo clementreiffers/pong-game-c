@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
 	int width = 0;
 	int height = 0;
 	// ici on initialise la fenetre en fullscreen
-	SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_FULLSCREEN, &window, &renderer);
+	SDL_CreateWindowAndRenderer(width, height, SDL_WINDOW_FULLSCREEN_DESKTOP, &window, &renderer);
 
 	//initialisation de la musique
 	Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048);
