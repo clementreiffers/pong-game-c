@@ -9,10 +9,10 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 	//initialisation du fond d'ecran
 	SDL_Surface *image = NULL;
 	SDL_Texture *texture = NULL;
-	image == NULL;
+	//image == NULL;
 	image = SDL_LoadBMP("Arcade.bmp");
 	texture = SDL_CreateTextureFromSurface(renderer, image);
-	texture == NULL;
+	//texture == NULL;
 	SDL_Rect rectangle;
 	
     // rectangles qui nous servirons pour les menus
