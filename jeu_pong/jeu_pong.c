@@ -112,6 +112,6 @@ int pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float v
 	// on ferme ce qu'on a initialisé
     TTF_CloseFont(font);
     TTF_Quit();
-	// on renvoie le score
+	// on renvoie qui a gagne
 	return J1>8 ?  1 :  2;
 }
