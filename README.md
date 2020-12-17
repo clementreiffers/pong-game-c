@@ -6,21 +6,27 @@ We has chosen to code our **pong game**.
 
 ## How to launch this game
 
-For now, this game works only on Windows, but for **linux users**, you can install Wine:
-```bash
-sudo apt install wine
-```
+### Windows Users
 There is a **main.exe** file in jeu_pong folder.
 You must launch this app to play the game.
-For Windows users, just click on this compilation, and for linux users, just execute the command :
+For Windows users, just click on this compilation or write on the terminal :
 ```bash
-wine main.exe
+./main.exe
 ```
 
+### Linux Users
+There is a **main** file in jeu_pong folder
+you must launch this app to play the game
+For linux users, write on the terminal :
+```bash 
+./main
+```
 ## How to compile this game
 
 There is a **Makefile** in jeu_pong folder.
-You just have to write "make" in the terminal to compile it.
+### Windows Users
+
+You just have to write "make windows" in the terminal to compile it.
 if you haven't installed make software, go install it !
 Makefile executes these commands :
 ```bash
@@ -39,7 +45,21 @@ gcc -std=c17 gagnant.c -c -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main
 gcc -std=c17 main.c ellipse.o raquette.o compteur.o jeu_pong.o menu.o gagnant.o -I SDL2\include -L SDL2\lib -Wall -lmingw32 -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_mixer -o main
 
 ```
+### Linux Users
 
+You just have to write "make linux" in the terminal to compile it.
+if you haven't installed make software, go install it !
+Makefile executes these commands :
+```bash
+	gcc -std=c17 ellipse.c -c -Wall -lSDL2main -lSDL2  -lm
+	gcc -std=c17 raquette.c -c -Wall -lSDL2main -lSDL2  -lm
+	gcc -std=c17 compteur.c -c -Wall -lSDL2main -lSDL2  -lm
+	gcc -std=c17 jeu_pong.c -c -Wall -lSDL2main -lSDL2 -lSDL2_mixer  -lm
+	gcc -std=c17 menu.c -c -Wall -lSDL2main -lSDL2 -lSDL2_ttf -lm
+	gcc -std=c17 gagnant.c -c -Wall -lSDL2main -lSDL2 -lSDL2_ttf -lm
+
+	gcc -std=c17 main.c ellipse.o raquette.o compteur.o jeu_pong.o menu.o gagnant.o -Wall -lSDL2main -lSDL2 -lSDL2_ttf -lSDL2_mixer -lm -o main
+```
 ## Different Files
 There are many files in this jeu_pong folder, like :
 -   menu.c : to know the exactly choice of what player wants
