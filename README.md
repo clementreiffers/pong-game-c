@@ -4,6 +4,11 @@ For the innovation track in esme sudria, they ask us to conceive a game in c lan
 We has chosen to code our **pong game**.
 *This project is realised by Clément Reiffers and Owen Locqueneux*
 
+## How to play
+
+the left player (player 1) use "Z" to go to the top of the screen and "S" to go down.
+the right player (player 2) use "up arrow" to go to the top of the screen and "down arrow" to go down.
+
 ## How to launch this game
 
 ### Windows Users

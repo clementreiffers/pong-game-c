@@ -37,12 +37,8 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 	SDL_Surface * rectquit = TTF_RenderText_Solid(font, "Quitter", white);
     SDL_Texture * texquit = SDL_CreateTextureFromSurface(renderer, rectquit);
 
-	// on met la taille de la texture (notamment celle de la police)
+	// on "questionne la texture"
 	SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h);
-	SDL_QueryTexture(texfacile, NULL, NULL, 0, 0);
-    SDL_QueryTexture(texnorm, NULL, NULL, 0, 0);
-    SDL_QueryTexture(texdiff, NULL, NULL, 0, 0);
-    SDL_QueryTexture(texquit, NULL, NULL, 0, 0);
 
 	// on definie la position en x et y du rectangle pour mettre le background
 	rectangle.x = (width- rectangle.w)/2;

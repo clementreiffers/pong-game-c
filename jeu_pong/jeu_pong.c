@@ -19,10 +19,6 @@ int pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float v
 	// variables pour la balle
     float x = width/2; // sa position en x
     float y = height/2; // sa position en y
-    //float dx = (rand() % 3)+1; // sa norme en vitesse en x
-	int sx = 1; // son signe en x
-    //float dy = (rand() % 3)+1; // sa norme en vitesse en y
-	int sy = 1; // son signe en y
     int r = 5; // son rayon
 	TTF_Init();
 	TTF_Font * font = TTF_OpenFont("Lazer84.ttf", 25);
@@ -37,6 +33,7 @@ int pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float v
 		SDL_RenderClear(renderer);
 
 		// on recupere les entrées claviers
+		
 		raquettes R = deplacement(renderer, rectangle1, rectangle2, height, vitesse_raquette);		
 		continuer = exitOrNot();
 
@@ -86,11 +83,11 @@ int pong(SDL_Window *window, SDL_Renderer *renderer, float dx, float dy, float v
         y+=dy;
 
 		// rebond de la balle en haut et en bas
-        y<=0+r || y>=height-r ? sy=-sy, dy = sy*dy : 1; 
+        y<=r || y>=height-r ? dy=-dy : 1; 
 		// rebond de la balle sur la raquette gauche
-		x<=rectangle1.x+largeur && y >=rectangle1.y && y<= rectangle1.y+longueur ? sx=-sx, dx = sx*dx:1;
+		x<=rectangle1.x+largeur && y >=rectangle1.y && y<= rectangle1.y+longueur ? dx = -dx : 1;
 		// rebond raquette droite
-		x>=rectangle2.x && y >= rectangle2.y && y<=rectangle2.y+longueur ? sx=-sx, dx = sx*dx :1;
+		x>=rectangle2.x && y >= rectangle2.y && y<=rectangle2.y+longueur ? dx = -dx : 1;
 		
 		// au cas où la balle va là où on ne veut pas
 		if (x>rectangle2.x+longueur) {
