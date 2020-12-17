@@ -9,13 +9,11 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
 	//initialisation du fond d'ecran
 	SDL_Surface *image = NULL;
 	SDL_Texture *texture = NULL;
-	//image == NULL;
 	image = SDL_LoadBMP("Arcade.bmp");
 	texture = SDL_CreateTextureFromSurface(renderer, image);
-	//texture == NULL;
-	SDL_Rect rectangle;
 	
     // rectangles qui nous servirons pour les menus
+	SDL_Rect rectangle;
 	SDL_Rect facile = { width/3, height/5, width/3, height/15};
 	SDL_Rect normal =  { width/3, height/5 + 2* height/15, width/3, height/15};
 	SDL_Rect hardcore = { width/3, height/5 + 4* height/15, width/3, height/15};
@@ -46,6 +44,7 @@ int menu(SDL_Window *window, SDL_Renderer *renderer, float width, float height) 
     SDL_QueryTexture(texdiff, NULL, NULL, 0, 0);
     SDL_QueryTexture(texquit, NULL, NULL, 0, 0);
 
+	// on definie la position en x et y du rectangle pour mettre le background
 	rectangle.x = (width- rectangle.w)/2;
 	rectangle.y = (height - rectangle.h)/2;
 
