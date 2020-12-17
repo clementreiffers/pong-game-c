@@ -2,7 +2,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>
-#include <SDL2/SDL_ttf.h>
 #include <SDL2/SDL_mixer.h>
 
 #include "jeu_pong.h"
@@ -64,5 +63,5 @@ int main(int argc, char *argv[])
 	Mix_FreeMusic(backgroundSound);
 	SDL_Quit();
 
-	return EXIT_SUCCESS;
+	return 0;
 }
